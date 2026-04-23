@@ -250,6 +250,138 @@
     display: block; margin-left: auto; margin-bottom: 20px;
   }
   .logout-btn:hover { border-color: #8b2020; color: #c0392b; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* ─── MOBILE RESPONSIVE — TABLETS (≤ 768px) ─────────── */
+  /* ═══════════════════════════════════════════════════════ */
+  @media (max-width: 768px) {
+    /* Nav */
+    .nav { padding: 16px 20px; }
+    .nav-logo { font-size: 20px; letter-spacing: 3px; }
+    .nav-btn { padding: 7px 14px; font-size: 9px; letter-spacing: 1.5px; }
+
+    /* Sections */
+    .section { padding: 32px 20px; }
+    .section-heading { font-size: 26px; margin-bottom: 24px; }
+    .eyebrow { font-size: 9px; letter-spacing: 2px; }
+
+    /* Step indicator */
+    .step-indicator { margin-bottom: 28px; }
+    .step-dot { width: 26px; height: 26px; font-size: 9px; }
+
+    /* Services grid — 2 columns on tablet */
+    .services-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .service-card { padding: 18px 16px; }
+    .service-name { font-size: 16px; }
+    .service-price { font-size: 20px; margin-top: 10px; }
+
+    /* Calendar */
+    .calendar-wrap { padding: 18px 14px; }
+    .cal-month { font-size: 16px; }
+    .cal-day { padding: 10px 0; font-size: 13px; }
+    .cal-day-name { font-size: 9px; }
+
+    /* Slots grid — 2 columns */
+    .slots-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .slot { padding: 14px 0; font-size: 12px; }
+
+    /* Form — stack fields */
+    .form-grid { grid-template-columns: 1fr; gap: 14px; }
+    .form-input { font-size: 16px; padding: 14px 14px; } /* 16px prevents iOS zoom on focus */
+
+    /* Buttons — full-width stack */
+    .btn-gold, .btn-outline {
+      padding: 14px 24px; font-size: 10px; letter-spacing: 2px;
+      flex: 1; text-align: center;
+    }
+    .btn-row { flex-wrap: wrap; gap: 10px; }
+
+    /* Confirmation */
+    .confirm-box { padding: 32px 24px; }
+    .confirm-title { font-size: 22px; }
+    .confirm-monogram { width: 52px; height: 52px; font-size: 20px; }
+
+    /* Admin — stack calendar on top of panel */
+    .admin-grid { grid-template-columns: 1fr; gap: 16px; }
+    .admin-stat-row { gap: 8px; }
+    .stat-box { padding: 12px 8px; }
+    .stat-num { font-size: 24px; }
+    .stat-label { font-size: 8px; letter-spacing: 1px; }
+    .admin-panel { padding: 18px; }
+    .admin-day-title { font-size: 18px; }
+
+    /* Booking rows in admin — stack on narrow screens */
+    .booking-row { flex-wrap: wrap; }
+    .booking-time { min-width: 60px; font-size: 14px; }
+    .booking-actions { width: 100%; justify-content: flex-end; margin-top: 8px; }
+
+    /* Auth modal */
+    .auth-box { padding: 32px 24px; max-width: 100%; margin: 20px; }
+    .auth-title { font-size: 22px; }
+
+    /* Admin top buttons row — stack on very narrow */
+    #section-admin .admin-grid + * { flex-wrap: wrap; }
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* ─── MOBILE RESPONSIVE — PHONES (≤ 480px) ──────────── */
+  /* ═══════════════════════════════════════════════════════ */
+  @media (max-width: 480px) {
+    /* Nav — tighter */
+    .nav { padding: 14px 16px; }
+    .nav-logo { font-size: 17px; letter-spacing: 2px; }
+    .nav-btn { padding: 6px 11px; font-size: 8px; letter-spacing: 1px; }
+
+    /* Sections */
+    .section { padding: 26px 16px; }
+    .section-heading { font-size: 22px; margin-bottom: 20px; }
+
+    /* Step dots smaller */
+    .step-dot { width: 22px; height: 22px; font-size: 8px; }
+    .step-dot.done { font-size: 10px; }
+
+    /* Services — single column */
+    .services-grid { grid-template-columns: 1fr; gap: 8px; }
+    .service-card { padding: 16px 18px; }
+    .service-card .service-name { font-size: 15px; }
+    .service-price { font-size: 18px; margin-top: 8px; }
+
+    /* Calendar more compact */
+    .calendar-wrap { padding: 14px 10px; }
+    .cal-grid { gap: 2px; }
+    .cal-day { padding: 9px 0; font-size: 12px; }
+
+    /* Slots — single column so times are fully readable */
+    .slots-grid { grid-template-columns: repeat(2, 1fr); }
+    .slot { padding: 12px 0; font-size: 11px; }
+
+    /* Form spacing */
+    .form-grid { gap: 12px; }
+    .form-label { font-size: 9px; }
+
+    /* Admin stats — smaller */
+    .admin-stat-row { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .stat-box { padding: 10px 4px; }
+    .stat-num { font-size: 20px; }
+
+    /* Admin calendar more compact */
+    .admin-cal-wrap { padding: 14px 10px; }
+    .admin-legend { font-size: 9px; }
+
+    /* Confirmation */
+    .confirm-box { padding: 28px 20px; }
+    .confirm-title { font-size: 20px; }
+    .confirm-row { font-size: 11px; }
+    .confirm-row .lbl { font-size: 9px; }
+
+    /* Back to booking + Sign out row — stack vertically on narrow screens */
+    #section-admin > div[style*="display:flex"] { flex-direction: column; gap: 8px; align-items: stretch !important; }
+    #section-admin > div[style*="display:flex"] button { width: 100%; text-align: center; }
+  }
+
+  /* Prevent horizontal overflow on any device */
+  html, body { overflow-x: hidden; }
+  .app { max-width: 960px; width: 100%; }
 </style>
 </head>
 <body>
