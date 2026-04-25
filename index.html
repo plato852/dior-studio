@@ -43,7 +43,9 @@
   .nav-logo {
     font-family: var(--font-display); font-size: 24px; letter-spacing: 4px;
     color: var(--gold); font-weight: 300; font-style: italic;
+    cursor: pointer; transition: opacity 0.2s; user-select: none;
   }
+  .nav-logo:hover { opacity: 0.75; }
   .nav-logo span { font-style: normal; font-weight: 500; }
   .nav-links { display: flex; gap: 6px; }
   .nav-btn {
@@ -388,9 +390,9 @@
 <div class="app">
   <!-- NAV -->
   <nav class="nav">
-    <div class="nav-logo"><span>Dior</span> Studio</div>
+    <div class="nav-logo" onclick="goHome()" title="Return to home"><span>Dior</span> Studio</div>
     <div class="nav-links">
-      <button class="nav-btn active" onclick="showSection('booking',this)">Book</button>
+      <button class="nav-btn active" onclick="goHome()">Book</button>
       <button class="nav-btn" onclick="showSection('admin',this)">Admin</button>
     </div>
   </nav>
@@ -828,10 +830,51 @@ async function logout() {
 }
 
 function goToBooking() {
+  // Same as goHome — kept for backwards compatibility with the admin Back button
+  goHome();
+}
+
+// Returns to the booking landing page from anywhere — resets the flow cleanly
+function goHome() {
+  // Reset booking selections so user starts fresh
+  state.selectedService = null;
+  state.selectedServicePrice = null;
+  state.selectedDate = null;
+  state.selectedSlot = null;
+
+  // Clear visual selections
+  document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
+
+  // Reset Continue button state
+  const btnDate = document.getElementById('btn-to-date');
+  if (btnDate) { btnDate.style.opacity = '0.4'; btnDate.style.pointerEvents = 'none'; }
+  const btnTime = document.getElementById('btn-to-time');
+  if (btnTime) { btnTime.style.opacity = '0.4'; btnTime.style.pointerEvents = 'none'; }
+  const btnDetails = document.getElementById('btn-to-details');
+  if (btnDetails) { btnDetails.style.opacity = '0.4'; btnDetails.style.pointerEvents = 'none'; }
+
+  // Clear form inputs
+  ['f-fname','f-lname','f-phone','f-email','f-notes'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+
+  // Hide all booking sub-steps and show step 1
+  document.querySelectorAll('[id^="step-"]').forEach(x => x.style.display = 'none');
+  const firstStep = document.getElementById('step-service');
+  if (firstStep) firstStep.style.display = 'block';
+
+  // Show booking section, hide admin
   document.querySelectorAll('.section').forEach(x => x.classList.remove('active'));
   document.getElementById('section-booking').classList.add('active');
+
+  // Set Book nav button to active
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.nav-btn')[0].classList.add('active');
+
+  // If auth modal was somehow open, close it
+  const authOverlay = document.getElementById('auth-overlay');
+  if (authOverlay) authOverlay.style.display = 'none';
 }
 
 function closeAuthModal() {
