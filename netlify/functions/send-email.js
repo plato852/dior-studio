@@ -82,7 +82,7 @@ export default async (req) => {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            from: 'Dior Studio <onboarding@resend.dev>',
+            from: 'Dior Studio <bookings@diorstudio.co.uk>',
             to: [customerEmail],
             subject: `Booking Confirmed — ${service} on ${date}`,
             html: customerHtml
@@ -100,7 +100,7 @@ export default async (req) => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          from: 'Dior Studio <onboarding@resend.dev>',
+          from: 'Dior Studio <bookings@diorstudio.co.uk>',
           to: [HAIRDRESSER_EMAIL],
           subject: `New Booking — ${customerName}, ${service} at ${time} on ${date}`,
           html: hairdresserHtml
