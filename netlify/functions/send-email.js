@@ -6,7 +6,7 @@ export default async (req) => {
     return new Response('Method not allowed', { status: 405 });
   }
 
-  const { customerName, customerEmail, service, date, time, price, phone, ref } = await req.json();
+  const { customerName, customerEmail, service, date, time, phone, ref } = await req.json();
 
   // ── Confirmation email to customer ────────────────────
   const customerHtml = `
@@ -26,13 +26,9 @@ export default async (req) => {
           <td style="padding:10px 0;font-size:10px;color:#9a8860;letter-spacing:1px;text-transform:uppercase;">Date</td>
           <td style="padding:10px 0;font-size:13px;color:#f0ead6;text-align:right;">${date}</td>
         </tr>
-        <tr style="border-bottom:0.5px solid #1a1a1a;">
-          <td style="padding:10px 0;font-size:10px;color:#9a8860;letter-spacing:1px;text-transform:uppercase;">Time</td>
-          <td style="padding:10px 0;font-size:13px;color:#f0ead6;text-align:right;">${time}</td>
-        </tr>
         <tr>
-          <td style="padding:10px 0;font-size:10px;color:#9a8860;letter-spacing:1px;text-transform:uppercase;">Price</td>
-          <td style="padding:10px 0;font-size:15px;color:#C9A84C;text-align:right;">${price}</td>
+          <td style="padding:10px 0;font-size:10px;color:#9a8860;letter-spacing:1px;text-transform:uppercase;">Time</td>
+          <td style="padding:10px 0;font-size:15px;color:#C9A84C;text-align:right;">${time}</td>
         </tr>
       </table>
       <p style="font-size:10px;color:#5a4e38;margin-top:32px;letter-spacing:1px;text-transform:uppercase;">Ref: ${ref}</p>
