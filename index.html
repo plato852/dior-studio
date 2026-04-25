@@ -412,35 +412,41 @@
         <div class="step-dot">4</div>
       </div>
       <div class="services-grid">
-        <div class="service-card" onclick="selectService(this,'Haircut','45 min','£45')">
-          <div class="service-name">Haircut</div>
-          <div class="service-detail">Cut &amp; Style · 45 min</div>
-          <div class="service-price">£45</div>
+        <div class="service-card" onclick="selectService(this,'Man\'s Cut','30 min')">
+          <div class="service-name">Man's Cut</div>
+          <div class="service-detail">Classic cut &amp; finish · 30 min</div>
         </div>
-        <div class="service-card" onclick="selectService(this,'Colour & Highlights','2 hr','£95')">
-          <div class="service-name">Colour &amp; Highlights</div>
-          <div class="service-detail">Full colour or balayage · 2 hr</div>
-          <div class="service-price">£95</div>
+        <div class="service-card" onclick="selectService(this,'Ladies Haircut & Styling','45 min')">
+          <div class="service-name">Ladies Haircut &amp; Styling</div>
+          <div class="service-detail">Wash, cut &amp; style · 45 min</div>
         </div>
-        <div class="service-card" onclick="selectService(this,'Blow Dry','30 min','£30')">
-          <div class="service-name">Blow Dry &amp; Styling</div>
-          <div class="service-detail">Wash, blow dry, finish · 30 min</div>
-          <div class="service-price">£30</div>
+        <div class="service-card" onclick="selectService(this,'Kids Cut (2-10y)','30 min')">
+          <div class="service-name">Kids Cut</div>
+          <div class="service-detail">Ages 2–10 · 30 min</div>
         </div>
-        <div class="service-card" onclick="selectService(this,'Keratin Treatment','1 hr','£65')">
-          <div class="service-name">Keratin Treatment</div>
-          <div class="service-detail">Deep keratin · 1 hr</div>
-          <div class="service-price">£65</div>
+        <div class="service-card" onclick="selectService(this,'Colour','2 hr')">
+          <div class="service-name">Colour</div>
+          <div class="service-detail">Full colour service · 2 hr</div>
         </div>
-        <div class="service-card" onclick="selectService(this,'Extensions','3 hr','£180')">
-          <div class="service-name">Extensions</div>
-          <div class="service-detail">Tape or bond · 3 hr</div>
-          <div class="service-price">£180</div>
+        <div class="service-card" onclick="selectService(this,'Highlights / Balayage','2.5 hr')">
+          <div class="service-name">Highlights / Balayage</div>
+          <div class="service-detail">Babylight, balayage by consultation · 2.5 hr</div>
         </div>
-        <div class="service-card" onclick="selectService(this,'Cut & Colour','2.5 hr','£125')">
-          <div class="service-name">Cut &amp; Colour</div>
-          <div class="service-detail">Combined treatment · 2.5 hr</div>
-          <div class="service-price">£125</div>
+        <div class="service-card" onclick="selectService(this,'Cold Perm','2 hr')">
+          <div class="service-name">Cold Perm 冷燙</div>
+          <div class="service-detail">Including haircut · 2 hr</div>
+        </div>
+        <div class="service-card" onclick="selectService(this,'Hot Perm','2.5 hr')">
+          <div class="service-name">Hot Perm 熱燙</div>
+          <div class="service-detail">Ceramic perm, including cut · 2.5 hr</div>
+        </div>
+        <div class="service-card" onclick="selectService(this,'Permanent Straightening','3 hr')">
+          <div class="service-name">Permanent Straightening 負離子</div>
+          <div class="service-detail">Including cut · 3 hr</div>
+        </div>
+        <div class="service-card" onclick="selectService(this,'Keratin Treatment','1.5 hr')">
+          <div class="service-name">Keratin Treatment 巴西焗油</div>
+          <div class="service-detail">Deep keratin treatment · 1.5 hr</div>
         </div>
       </div>
       <div class="btn-row">
@@ -543,7 +549,6 @@
               <div class="confirm-row"><span class="lbl">Service</span><span class="val" id="c-service">—</span></div>
               <div class="confirm-row"><span class="lbl">Date</span><span class="val" id="c-date">—</span></div>
               <div class="confirm-row"><span class="lbl">Time</span><span class="val" id="c-time">—</span></div>
-              <div class="confirm-row"><span class="lbl">Price</span><span class="val" id="c-price">—</span></div>
               <div class="confirm-row"><span class="lbl">Contact</span><span class="val" id="c-phone">—</span></div>
             </div>
             <div class="confirm-ref" id="c-ref">Ref: DS-0000</div>
@@ -649,7 +654,7 @@ const now0 = new Date();
 let state = {
   calYear: now0.getFullYear(), calMonth: now0.getMonth(),
   adminYear: now0.getFullYear(), adminMonth: now0.getMonth(), adminSelectedDay: now0.getDate(),
-  selectedService: null, selectedServicePrice: null,
+  selectedService: null,
   selectedDate: null, selectedSlot: null
 };
 
@@ -838,7 +843,6 @@ function goToBooking() {
 function goHome() {
   // Reset booking selections so user starts fresh
   state.selectedService = null;
-  state.selectedServicePrice = null;
   state.selectedDate = null;
   state.selectedSlot = null;
 
@@ -895,11 +899,10 @@ db.auth.getSession().then(({ data: { session } }) => {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // BOOKING FLOW — STEP NAVIGATION
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-function selectService(el, name, dur, price) {
+function selectService(el, name, dur) {
   document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
   state.selectedService = name;
-  state.selectedServicePrice = price;
   const b = document.getElementById('btn-to-date');
   b.style.opacity = '1'; b.style.pointerEvents = 'auto';
 }
@@ -999,7 +1002,7 @@ async function confirmBooking() {
   const phone = document.getElementById('f-phone').value || '—';
   const email = document.getElementById('f-email').value || '';
   const notes = document.getElementById('f-notes').value || '';
-  const { selectedDate: sd, selectedService, selectedServicePrice, selectedSlot } = state;
+  const { selectedDate: sd, selectedService, selectedSlot } = state;
   const isoDate = toISO(sd.y, sd.m, sd.d);
   const dateStr = sd.d+' '+MONTHS[sd.m]+' '+sd.y;
 
@@ -1023,7 +1026,6 @@ async function confirmBooking() {
   document.getElementById('c-service').textContent = selectedService;
   document.getElementById('c-date').textContent    = dateStr;
   document.getElementById('c-time').textContent    = selectedSlot;
-  document.getElementById('c-price').textContent   = selectedServicePrice;
   document.getElementById('c-phone').textContent   = phone;
   document.getElementById('c-ref').textContent     = 'Ref: ' + refCode;
 
@@ -1037,7 +1039,6 @@ async function confirmBooking() {
       service:       selectedService,
       date:          dateStr,
       time:          selectedSlot,
-      price:         selectedServicePrice,
       phone,
       ref:           refCode
     })
@@ -1047,7 +1048,7 @@ async function confirmBooking() {
 }
 
 function resetBooking() {
-  state.selectedService = null; state.selectedServicePrice = null;
+  state.selectedService = null;
   state.selectedDate = null; state.selectedSlot = null;
   document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
   ['f-fname','f-lname','f-phone','f-email','f-notes'].forEach(id => document.getElementById(id).value = '');
