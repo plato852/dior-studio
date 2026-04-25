@@ -253,6 +253,37 @@
   }
   .logout-btn:hover { border-color: #8b2020; color: #c0392b; }
 
+  /* ─── WHATSAPP PRICE ENQUIRY BANNER ─── */
+  .wa-banner {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: rgba(37, 211, 102, 0.08);
+    border: 0.5px solid rgba(37, 211, 102, 0.4);
+    color: #25D366;
+    text-decoration: none;
+    padding: 11px 18px;
+    margin-bottom: 28px;
+    font-family: var(--font-body); font-size: 12px;
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+  }
+  .wa-banner:hover {
+    background: rgba(37, 211, 102, 0.14);
+    border-color: rgba(37, 211, 102, 0.7);
+  }
+  .wa-banner strong { color: #25D366; font-weight: 500; letter-spacing: 1px; }
+
+  /* ─── FORM FIELD ERROR STATE ─── */
+  .form-input.error {
+    border-color: #c0392b;
+    background: rgba(192, 57, 43, 0.06);
+  }
+  .form-error-msg {
+    font-size: 10px; color: #c0392b; letter-spacing: 0.5px;
+    margin-top: 4px; font-family: var(--font-body);
+    display: none;
+  }
+  .form-error-msg.visible { display: block; }
+
   /* ═══════════════════════════════════════════════════════ */
   /* ─── MOBILE RESPONSIVE — TABLETS (≤ 768px) ─────────── */
   /* ═══════════════════════════════════════════════════════ */
@@ -405,6 +436,12 @@
       <div class="eyebrow">Step 1 of 4</div>
       <div class="section-heading">Choose your <em>service</em></div>
       <div class="gold-rule"></div>
+      <a href="https://wa.me/447782394440" target="_blank" rel="noopener" class="wa-banner">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="flex-shrink:0;">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+        </svg>
+        <span>WhatsApp <strong>+44 7782 394440</strong> for price enquiry</span>
+      </a>
       <div class="step-indicator">
         <div class="step-dot current">1</div><div class="step-line"></div>
         <div class="step-dot">2</div><div class="step-line"></div>
@@ -418,7 +455,7 @@
         </div>
         <div class="service-card" onclick="selectService(this,'Ladies Haircut & Styling','45 min')">
           <div class="service-name">Ladies Haircut &amp; Styling</div>
-          <div class="service-detail">Wash, cut &amp; style · 45 min</div>
+          <div class="service-detail">Cut &amp; style · 45 min</div>
         </div>
         <div class="service-card" onclick="selectService(this,'Kids Cut (2-10y)','30 min')">
           <div class="service-name">Kids Cut</div>
@@ -510,20 +547,24 @@
       </div>
       <div class="form-grid">
         <div class="form-field">
-          <label class="form-label">First name</label>
+          <label class="form-label">First name *</label>
           <input class="form-input" id="f-fname" type="text" placeholder="Sophie" />
+          <div class="form-error-msg" id="err-fname">Please enter your first name.</div>
         </div>
         <div class="form-field">
-          <label class="form-label">Last name</label>
+          <label class="form-label">Last name *</label>
           <input class="form-input" id="f-lname" type="text" placeholder="Anderson" />
+          <div class="form-error-msg" id="err-lname">Please enter your last name.</div>
         </div>
         <div class="form-field">
-          <label class="form-label">Phone number</label>
-          <input class="form-input" id="f-phone" type="tel" placeholder="+44 7700 000000" />
+          <label class="form-label">UK phone number *</label>
+          <input class="form-input" id="f-phone" type="tel" placeholder="07700 000000" />
+          <div class="form-error-msg" id="err-phone">Please enter a valid UK phone number.</div>
         </div>
         <div class="form-field">
-          <label class="form-label">Email address</label>
+          <label class="form-label">Email address *</label>
           <input class="form-input" id="f-email" type="email" placeholder="sophie@email.com" />
+          <div class="form-error-msg" id="err-email">Please enter a valid email address.</div>
         </div>
         <div class="form-field full">
           <label class="form-label">Notes (optional)</label>
@@ -860,7 +901,12 @@ function goHome() {
   // Clear form inputs
   ['f-fname','f-lname','f-phone','f-email','f-notes'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.value = '';
+    if (el) { el.value = ''; el.classList.remove('error'); }
+  });
+  // Clear any visible error messages
+  ['err-fname','err-lname','err-phone','err-email'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('visible');
   });
 
   // Hide all booking sub-steps and show step 1
@@ -894,6 +940,16 @@ function closeAuthModal() {
 // Restore session on page load so she stays logged in after refresh
 db.auth.getSession().then(({ data: { session } }) => {
   if (session) console.log('Session restored:', session.user.email);
+});
+
+// Clear field errors as the user starts correcting them
+['f-fname','f-lname','f-phone','f-email'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', () => {
+    el.classList.remove('error');
+    const errEl = document.getElementById('err-' + id.split('-')[1]);
+    if (errEl) errEl.classList.remove('visible');
+  });
 });
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -989,19 +1045,71 @@ function pickSlot(s) {
 }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// BOOKING FLOW — VALIDATION HELPERS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+// UK phone: accepts +44xxxxxxxxxx, 0xxxxxxxxxx (11 digits), or bare 10-digit mobile
+// Strips spaces, dashes, brackets first
+function isValidUKPhone(raw) {
+  if (!raw) return false;
+  const cleaned = raw.replace(/[\s\-\(\)]/g, '');
+  // +44 followed by 10 digits (where the first cannot be 0)
+  if (/^\+44[1-9]\d{9}$/.test(cleaned)) return true;
+  // 0 followed by 10 digits (full UK domestic format)
+  if (/^0[1-9]\d{9}$/.test(cleaned)) return true;
+  // Bare 10 digits starting 1-9 (e.g. mobile without leading 0)
+  if (/^[1-9]\d{9}$/.test(cleaned)) return true;
+  return false;
+}
+
+function isValidEmail(raw) {
+  if (!raw) return false;
+  // Standard email regex: chars@chars.tld
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(raw.trim());
+}
+
+function setFieldError(fieldId, errId, hasError) {
+  const fld = document.getElementById(fieldId);
+  const err = document.getElementById(errId);
+  if (hasError) {
+    fld.classList.add('error');
+    err.classList.add('visible');
+  } else {
+    fld.classList.remove('error');
+    err.classList.remove('visible');
+  }
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // BOOKING FLOW — CONFIRM (writes to DB)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 async function confirmBooking() {
+  const fn    = document.getElementById('f-fname').value.trim();
+  const ln    = document.getElementById('f-lname').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const notes = document.getElementById('f-notes').value.trim();
+
+  // ── Validate all required fields ────────────────────
+  const errFn    = !fn;
+  const errLn    = !ln;
+  const errPhone = !isValidUKPhone(phone);
+  const errEmail = !isValidEmail(email);
+
+  setFieldError('f-fname', 'err-fname', errFn);
+  setFieldError('f-lname', 'err-lname', errLn);
+  setFieldError('f-phone', 'err-phone', errPhone);
+  setFieldError('f-email', 'err-email', errEmail);
+
+  if (errFn || errLn || errPhone || errEmail) {
+    return; // Don't proceed — user fixes errors first
+  }
+
   const confirmBtn = document.querySelector('#step-details .btn-gold');
   confirmBtn.textContent = 'Saving…';
   confirmBtn.style.opacity = '0.6';
   confirmBtn.style.pointerEvents = 'none';
 
-  const fn    = document.getElementById('f-fname').value || 'Guest';
-  const ln    = document.getElementById('f-lname').value || '';
-  const phone = document.getElementById('f-phone').value || '—';
-  const email = document.getElementById('f-email').value || '';
-  const notes = document.getElementById('f-notes').value || '';
   const { selectedDate: sd, selectedService, selectedSlot } = state;
   const isoDate = toISO(sd.y, sd.m, sd.d);
   const dateStr = sd.d+' '+MONTHS[sd.m]+' '+sd.y;
@@ -1051,7 +1159,14 @@ function resetBooking() {
   state.selectedService = null;
   state.selectedDate = null; state.selectedSlot = null;
   document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
-  ['f-fname','f-lname','f-phone','f-email','f-notes'].forEach(id => document.getElementById(id).value = '');
+  ['f-fname','f-lname','f-phone','f-email','f-notes'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.value = ''; el.classList.remove('error'); }
+  });
+  ['err-fname','err-lname','err-phone','err-email'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('visible');
+  });
   document.getElementById('btn-to-date').style.cssText = 'opacity:0.4;pointer-events:none';
   goStep('service');
 }
