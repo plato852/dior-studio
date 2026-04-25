@@ -744,6 +744,31 @@ async function getBookedSlotsForDate(isoDate) {
   return new Set(data.map(r => r.booking_time));
 }
 
+// Returns a Set of admin-blocked time strings for a specific date
+async function getBlockedSlotsForDate(isoDate) {
+  const { data, error } = await db
+    .from('blocked_slots')
+    .select('blocked_time')
+    .eq('blocked_date', isoDate);
+  if (error) { console.error('getBlockedSlots:', error); return new Set(); }
+  return new Set(data.map(r => r.blocked_time));
+}
+
+// Toggles a single blocked slot on/off
+async function toggleBlockedSlot(isoDate, time) {
+  const { data } = await db
+    .from('blocked_slots')
+    .select('id')
+    .eq('blocked_date', isoDate)
+    .eq('blocked_time', time)
+    .maybeSingle();
+  if (data) {
+    await db.from('blocked_slots').delete().eq('blocked_date', isoDate).eq('blocked_time', time);
+  } else {
+    await db.from('blocked_slots').insert([{ blocked_date: isoDate, blocked_time: time }]);
+  }
+}
+
 // Returns all bookings for a specific date as an array of objects
 async function getBookingsForDate(isoDate) {
   const { data, error } = await db
@@ -1026,13 +1051,20 @@ async function renderSlots() {
   showLoading(grid, 'Checking availability…');
 
   const isoDate = toISO(sd.y, sd.m, sd.d);
-  const taken   = await getBookedSlotsForDate(isoDate);
+  const [taken, blocked] = await Promise.all([
+    getBookedSlotsForDate(isoDate),
+    getBlockedSlotsForDate(isoDate)
+  ]);
 
   let h = '';
   SLOTS.forEach(s => {
-    const isTaken = taken.has(s), isSel = state.selectedSlot === s;
-    const cls = 'slot'+(isTaken?' taken':isSel?' selected':'');
-    h += `<div class="${cls}"${!isTaken?` onclick="pickSlot('${s}')"`:''}>${s}<span class="slot-sub">${isTaken?'booked':'available'}</span></div>`;
+    const isTaken    = taken.has(s);
+    const isBlocked  = blocked.has(s);
+    const unavailable = isTaken || isBlocked;
+    const isSel = state.selectedSlot === s;
+    const cls = 'slot'+(unavailable?' taken':isSel?' selected':'');
+    const label = unavailable ? 'unavailable' : 'available';
+    h += `<div class="${cls}"${!unavailable?` onclick="pickSlot('${s}')"`:''}>${s}<span class="slot-sub">${label}</span></div>`;
   });
   grid.innerHTML = h;
 }
@@ -1266,16 +1298,25 @@ async function renderAdminDay() {
   const scheduleEl = document.getElementById('admin-schedule-view');
   showLoading(scheduleEl, 'Loading bookings…');
 
-  const [dayBookings, blockedCheck] = await Promise.all([
+  const [dayBookings, blockedCheck, blockedSlotsSet] = await Promise.all([
     getBookingsForDate(isoDate),
-    db.from('blocked_days').select('id').eq('blocked_date', isoDate).maybeSingle()
+    db.from('blocked_days').select('id').eq('blocked_date', isoDate).maybeSingle(),
+    getBlockedSlotsForDate(isoDate)
   ]);
 
   const isVac  = !!blockedCheck.data;
   const taken  = new Set(dayBookings.map(b => b.booking_time));
-  document.getElementById('admin-day-sub').textContent = isVac
-    ? 'Day blocked — vacation'
-    : `${dayBookings.length} booking${dayBookings.length!==1?'s':''} · ${SLOTS.length-taken.size} slots open`;
+  const blockedCount = blockedSlotsSet.size;
+  const openCount = SLOTS.length - taken.size - blockedCount;
+  let subText;
+  if (isVac) subText = 'Day blocked — vacation';
+  else {
+    const parts = [`${dayBookings.length} booking${dayBookings.length!==1?'s':''}`];
+    if (blockedCount > 0) parts.push(`${blockedCount} blocked`);
+    parts.push(`${openCount} open`);
+    subText = parts.join(' · ');
+  }
+  document.getElementById('admin-day-sub').textContent = subText;
 
   let h = '';
   if (isVac) {
@@ -1283,6 +1324,7 @@ async function renderAdminDay() {
   } else {
     SLOTS.forEach(slot => {
       const bk = dayBookings.find(b => b.booking_time === slot);
+      const isBlocked = blockedSlotsSet.has(slot);
       if (bk) {
         h += `<div class="booking-row">
           <div class="booking-time">${slot}</div>
@@ -1294,8 +1336,22 @@ async function renderAdminDay() {
             <button class="btn-tiny danger" onclick="cancelBooking('${isoDate}','${slot}')">Cancel</button>
           </div>
         </div>`;
+      } else if (isBlocked) {
+        h += `<div class="empty-row" style="opacity:0.7;">
+          <div class="empty-time" style="text-decoration:line-through;">${slot}</div>
+          <div class="empty-label" style="color:var(--text-muted);">Blocked</div>
+          <div style="margin-left:auto;">
+            <button class="btn-tiny" onclick="toggleSlot('${isoDate}','${slot}')">Unblock</button>
+          </div>
+        </div>`;
       } else {
-        h += `<div class="empty-row"><div class="empty-time">${slot}</div><div class="empty-label">Available</div></div>`;
+        h += `<div class="empty-row">
+          <div class="empty-time">${slot}</div>
+          <div class="empty-label">Available</div>
+          <div style="margin-left:auto;">
+            <button class="btn-tiny" onclick="toggleSlot('${isoDate}','${slot}')">Block</button>
+          </div>
+        </div>`;
       }
     });
   }
@@ -1303,9 +1359,9 @@ async function renderAdminDay() {
 
   document.getElementById('vacation-toggle-wrap').innerHTML = `
     <button class="btn-gold" onclick="toggleVacation('${isoDate}')" style="font-size:9px;letter-spacing:2px;padding:12px 24px">
-      ${isVac ? 'Restore — allow bookings' : 'Block this day'}
+      ${isVac ? 'Restore — allow bookings' : 'Block entire day'}
     </button>
-    ${isVac ? '<div class="vac-hint">Customers will not see this day as bookable.</div>' : ''}
+    ${isVac ? '<div class="vac-hint">Customers will not see this day as bookable.</div>' : '<div class="vac-hint" style="margin-top:14px;">To block individual time slots instead, switch to the Schedule tab.</div>'}
   `;
 }
 
@@ -1321,6 +1377,11 @@ async function cancelBooking(isoDate, time) {
 async function toggleVacation(isoDate) {
   await toggleBlockedDay(isoDate);
   await Promise.all([renderAdminDay(), renderAdminCal()]);
+}
+
+async function toggleSlot(isoDate, time) {
+  await toggleBlockedSlot(isoDate, time);
+  await renderAdminDay();
 }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
